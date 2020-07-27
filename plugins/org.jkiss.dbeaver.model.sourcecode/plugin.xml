@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+
+<plugin>
+    
+    <extension-point id="org.jkiss.dbeaver.sourceCodeGenerator" name="%extension-point.org.jkiss.dbeaver.sourceCodeGenerator.name" schema="schema/org.jkiss.dbeaver.sourceCodeGenerator.exsd"/>
+    
+     <extension point="org.eclipse.ui.menus">
+        <!-- SQL editor menu -->
+        <menuContribution allPopups="false" locationURI="popup:org.eclipse.ui.popup.any?after=generate">
+            <menu label="%menu.database.sql.generate.sourcecode" icon="platform:/plugin/org.jkiss.dbeaver.ui/icons/misc/sql.png">
+                <visibleWhen>
+                    <with variable="activePart">
+                        <test property="org.jkiss.dbeaver.ui.editors.sql.util.canGenerate"/>
+                    </with>
+                </visibleWhen>
+                <dynamic id="org.jkiss.dbeaver.core.menu.sql.generate.sourcecode" class="org.jkiss.dbeaver.model.sourcecode.GeneratorSourceCodeContributor"/>
+            </menu>
+        </menuContribution>
+
+    </extension>
+
+    <!-- SQL Generators -->
+    <extension point="org.jkiss.dbeaver.sourceCodeGenerator">
+        
+        <generator id="tableSourceCode_entity" class="org.jkiss.dbeaver.model.sourcecode.entity.GeneratorSourceCodeEntity" label="Entity" description="Get source code" order="1003">
+            <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
+        </generator>
+        <generator id="tableSourceCode_lombokData" class="org.jkiss.dbeaver.model.sourcecode.entity.GeneratorSourceCodeLombokData" label="LombokData" description="Get source code" order="1003">
+            <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
+        </generator>
+        <generator id="tableSourceCode_dao" class="org.jkiss.dbeaver.model.sourcecode.dao.GeneratorSourceCodeDao" label="Dao" description="Get source code" order="1004">
+            <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
+        </generator>
+        <generator id="tableSourceCode_mybatis" class="org.jkiss.dbeaver.model.sourcecode.mybatis.GeneratorSourceCodeMybatis" label="Mybatis" description="Get source code" order="1005">
+            <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
+        </generator>
+        <generator id="tableSourceCode_component" class="org.jkiss.dbeaver.model.sourcecode.component.GeneratorSourceCodeComponent" label="Component" description="Get source code" order="1006">
+            <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
+        </generator>
+        <generator id="tableSourceCode_componentImpl" class="org.jkiss.dbeaver.model.sourcecode.component.GeneratorSourceCodeComponentImpl" label="ComponentImpl" description="Get source code" order="1007">
+            <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
+        </generator>
+         <generator id="tableSourceCode_service" class="org.jkiss.dbeaver.model.sourcecode.service.GeneratorSourceCodeService" label="Service" description="Get source code" order="1008">
+            <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
+        </generator>
+        <generator id="tableSourceCode_serviceImpl" class="org.jkiss.dbeaver.model.sourcecode.service.GeneratorSourceCodeServiceImpl" label="ServiceImpl" description="Get source code" order="1009">
+            <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
+        </generator>
+         <generator id="tableSourceCode_controller" class="org.jkiss.dbeaver.model.sourcecode.controller.GeneratorSourceCodeController" label="Controller" description="Get source code" order="1010">
+            <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
+        </generator>
+    </extension>
+    
+    
+    <extension point="org.eclipse.core.runtime.preferences">
+        <initializer class="org.jkiss.dbeaver.model.sourcecode.ui.preferences.SourceCodePreferencesInitializer"/>
+    </extension>
+    
+     <extension point="org.eclipse.ui.preferencePages">
+        <page id="org.jkiss.dbeaver.preferences.sourcecode.main" class="org.jkiss.dbeaver.model.sourcecode.ui.preferences.PrefPageSourceCodeGeneral" name="%menu.database.sql.generate.sourcecode">
+        </page>
+    <!--
+    
+        <page category="org.jkiss.dbeaver.preferences.sourcecode.main" id="org.jkiss.dbeaver.preferences.sourcecode.main.codetemplate" class="org.jkiss.dbeaver.model.sourcecode.ui.preferences.PrefPageSourceCodeTemplates" name="%menu.database.sql.generate.sourcecode_template">
+        </page>
+        
+        -->
+     </extension>
+ 
+</plugin>
