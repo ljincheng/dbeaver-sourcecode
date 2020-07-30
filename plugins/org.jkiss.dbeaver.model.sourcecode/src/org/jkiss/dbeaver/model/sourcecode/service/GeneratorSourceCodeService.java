@@ -240,7 +240,7 @@ public class GeneratorSourceCodeService extends GeneratorSourceCode{
 				 		+"	 * @param "+mEntity_paramName + lf
 				 		+"	 * @return" + lf
 				 		+"	 */");
-			 CodeHelper.addCodeLine(sql,String.format("public Integer update%sBy%s(%s %s)", tableName_upperCamelCase,primaryKey_upperCamelCase,mEntity_typeName,mEntity_paramName));
+			 CodeHelper.addCodeLine(sql,String.format("public Integer update%sBy%s(%s %s);", tableName_upperCamelCase,primaryKey_upperCamelCase,mEntity_typeName,mEntity_paramName));
 			 sql.append(lf);
 			 CodeHelper.addCodeLine(sql,"/**" + lf
 				 		+"	 * 根据"+primaryKey+"删除"+description + lf
