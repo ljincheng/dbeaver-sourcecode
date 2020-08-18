@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.jkiss.dbeaver.ce.feature"
+      label="%featureName"
+      version="7.1.5.202008180835"
+      provider-name="%providerName"
+      plugin="org.jkiss.dbeaver.ui.app.standalone">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <includes
+         id="org.jkiss.dbeaver.standalone.feature"
+         version="7.1.5.202008180835"/>
+
+   <includes
+         id="org.jkiss.dbeaver.ext.office.feature"
+         version="1.1.76.202008180835"/>
+
+   <plugin
+         id="org.jkiss.dbeaver.ui.app.standalone"
+         download-size="197"
+         install-size="848"
+         version="7.1.5.202008180835"/>
+
+</feature>

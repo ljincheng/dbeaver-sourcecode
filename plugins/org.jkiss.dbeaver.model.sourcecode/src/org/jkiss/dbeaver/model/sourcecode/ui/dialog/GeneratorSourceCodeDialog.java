@@ -65,7 +65,6 @@ public class GeneratorSourceCodeDialog extends ViewSQLDialog {
 //        sqlGenerator.setEntitySuffix(fileRuleText.getText());
         sqlGenerator.setPageClassFullName(pageClassFullNameText.getText());
         sqlGenerator.setAuthor(store.getString(SourceCodePreferences.SOURCECODE_AUTHOR));
-        sqlGenerator.setAuthor(groupNameText.getText());
         sqlGenerator.setGroupName(groupNameText.getText());
         
         //设置文件规则
@@ -107,7 +106,6 @@ public class GeneratorSourceCodeDialog extends ViewSQLDialog {
              sqlGenerator.setPackageName(packageNameText.getText());
 //             sqlGenerator.setEntitySuffix(fileRuleText.getText());
              sqlGenerator.setPageClassFullName(pageClassFullNameText.getText());
-             sqlGenerator.setAuthor(groupNameText.getText());
              sqlGenerator.setGroupName(groupNameText.getText());
              SourceCodePreferences.saveDefaultPreferencesValue(store, SourceCodePreferences.SOURCECODE_GROUPNAME, groupNameText.getText());
         	UIUtils.runInUI(sqlGenerator);
