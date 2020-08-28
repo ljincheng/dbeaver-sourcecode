@@ -21,6 +21,10 @@ public final class SourceCodePreferences {
 	public static final String SOURCECODE_CODEOUTPUTFOLDER = "sourcecode.default.codeOutputFolder"; //$NON-NLS-1$
 	public static final String SOURCECODE_PACKAGENAME = "sourcecode.default.packagePath"; //$NON-NLS-1$
 	public static final String SOURCECODE_PAGECLASSFULLNAME = "sourcecode.default.pageClassFullName"; //$NON-NLS-1$
+	public static final String SOURCECODE_BUSINESSEXCEPTION = "sourcecode.default.businessException"; //$NON-NLS-1$
+	public static final String SOURCECODE_ASSERTUTILS = "sourcecode.default.assertUtils"; //$NON-NLS-1$
+	public static final String SOURCECODE_BASECONTROLLER = "sourcecode.default.baseController"; //$NON-NLS-1$
+	public static final String SOURCECODE_JSONVIEW = "sourcecode.default.jsonView"; //$NON-NLS-1$
 	public static final String SOURCECODE_ENTITYSUFFIX = "sourcecode.default.entitySuffix"; //$NON-NLS-1$
 	public static final String SOURCECODE_GROUPNAME = "sourcecode.default.groupName"; //$NON-NLS-1$
 	public static final String SOURCECODE_AUTHOR = "sourcecode.default.author"; //$NON-NLS-1$
@@ -55,8 +59,12 @@ public final class SourceCodePreferences {
            PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_CODEOUTPUTFOLDER, outPutDir.getPath());
         }
         
-        PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_PACKAGENAME, "org.myproject");
-        PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_PAGECLASSFULLNAME, "com.eic.manage.common.page.PageDo");
+        PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_PACKAGENAME, "cn.booktable");
+        PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_PAGECLASSFULLNAME, "cn.booktable.core.page.PageDo");
+        PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_BUSINESSEXCEPTION, "cn.booktable.exception.BusinessException");
+        PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_ASSERTUTILS, "cn.booktable.util.AssertUtils");
+        PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_BASECONTROLLER, "cn.booktable.service.webadmin.controller.base.BaseController");
+        PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_JSONVIEW, "cn.booktable.core.view.JsonView");
         PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_ENTITYSUFFIX, "Do");
         PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_AUTHOR, sysUserName);
         PrefUtils.setDefaultPreferenceValue(store, SourceCodePreferences.SOURCECODE_GROUPNAME, "test");

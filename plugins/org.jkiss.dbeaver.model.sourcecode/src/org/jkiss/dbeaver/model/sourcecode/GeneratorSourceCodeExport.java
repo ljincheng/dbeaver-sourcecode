@@ -140,5 +140,14 @@ public class GeneratorSourceCodeExport {
 		}
 		return false;
 	}
+	public boolean exportHtml(String filePath,String content,String database)
+	{
+		if(!CodeHelper.isEmpty(content))
+		{
+			String mybatisFilePath=rootFolderName+"/"+database+"/html/"+filePath;
+			return saveFile(mybatisFilePath,content);
+		}
+		return false;
+	}
 
 }

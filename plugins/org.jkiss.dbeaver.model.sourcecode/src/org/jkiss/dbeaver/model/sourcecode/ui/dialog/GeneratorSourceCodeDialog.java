@@ -30,6 +30,12 @@ public class GeneratorSourceCodeDialog extends ViewSQLDialog {
     private Text pageClassFullNameText;
 //    private Text fileRuleText;
     private Text groupNameText;
+    
+    private Text tpl_jsonView;
+    private Text tpl_businessException;
+    private Text tpl_assertUtils;
+    private Text tpl_baseController;
+    
     private DBPPreferenceStore store ;
   //  private GeneratorSourceCodeExport mGeneratorSourceCodeExport;
 
@@ -59,6 +65,10 @@ public class GeneratorSourceCodeDialog extends ViewSQLDialog {
         pageClassFullNameText= UIUtils.createLabelText(settings, UIMessages.dbeaver_generate_sourcecode_pageClassFullName, store.getString(SourceCodePreferences.SOURCECODE_PAGECLASSFULLNAME));
 //        fileRuleText= UIUtils.createLabelText(settings, UIMessages.dbeaver_generate_sourcecode_entitySuffix, sqlGenerator.getFileRule());
         groupNameText= UIUtils.createLabelText(settings, UIMessages.dbeaver_generate_sourcecode_groupName, store.getString(SourceCodePreferences.SOURCECODE_GROUPNAME));
+        tpl_jsonView= UIUtils.createLabelText(settings, UIMessages.dbeaver_generate_sourcecode_jsonView, store.getString(SourceCodePreferences.SOURCECODE_JSONVIEW));
+        tpl_businessException= UIUtils.createLabelText(settings, UIMessages.dbeaver_generate_sourcecode_businessException, store.getString(SourceCodePreferences.SOURCECODE_BUSINESSEXCEPTION));
+        tpl_assertUtils= UIUtils.createLabelText(settings, UIMessages.dbeaver_generate_sourcecode_assertUtils, store.getString(SourceCodePreferences.SOURCECODE_ASSERTUTILS));
+        tpl_baseController= UIUtils.createLabelText(settings, UIMessages.dbeaver_generate_sourcecode_baseController, store.getString(SourceCodePreferences.SOURCECODE_BASECONTROLLER));
         
         sqlGenerator.setRootPath(directoryText.getText());
         sqlGenerator.setPackageName(packageNameText.getText());
@@ -66,6 +76,11 @@ public class GeneratorSourceCodeDialog extends ViewSQLDialog {
         sqlGenerator.setPageClassFullName(pageClassFullNameText.getText());
         sqlGenerator.setAuthor(store.getString(SourceCodePreferences.SOURCECODE_AUTHOR));
         sqlGenerator.setGroupName(groupNameText.getText());
+        
+        sqlGenerator.setTpl_assertUtils(tpl_assertUtils.getText());
+        sqlGenerator.setTpl_baseController(tpl_baseController.getText());
+        sqlGenerator.setTpl_businessException(tpl_businessException.getText());
+        sqlGenerator.setTpl_jsonView(tpl_jsonView.getText());
         
         //设置文件规则
         sqlGenerator.setRuleEntity(store.getString(SourceCodePreferences.SOURCECODE_RULE_ENTITY));
@@ -104,6 +119,10 @@ public class GeneratorSourceCodeDialog extends ViewSQLDialog {
         	 sqlGenerator.setGeneratorType(0);
         	 sqlGenerator.setRootPath(directoryText.getText());
              sqlGenerator.setPackageName(packageNameText.getText());
+             sqlGenerator.setTpl_assertUtils(tpl_assertUtils.getText());
+             sqlGenerator.setTpl_baseController(tpl_baseController.getText());
+             sqlGenerator.setTpl_businessException(tpl_businessException.getText());
+             sqlGenerator.setTpl_jsonView(tpl_jsonView.getText());
 //             sqlGenerator.setEntitySuffix(fileRuleText.getText());
              sqlGenerator.setPageClassFullName(pageClassFullNameText.getText());
              sqlGenerator.setGroupName(groupNameText.getText());
@@ -121,6 +140,10 @@ public class GeneratorSourceCodeDialog extends ViewSQLDialog {
         	sqlGenerator.setGeneratorType(1);
         	sqlGenerator.setRootPath(directoryText.getText());
             sqlGenerator.setPackageName(packageNameText.getText());
+            sqlGenerator.setTpl_assertUtils(tpl_assertUtils.getText());
+            sqlGenerator.setTpl_baseController(tpl_baseController.getText());
+            sqlGenerator.setTpl_businessException(tpl_businessException.getText());
+            sqlGenerator.setTpl_jsonView(tpl_jsonView.getText());
 //            sqlGenerator.setEntitySuffix(entitySuffixText.getText());
             sqlGenerator.setPageClassFullName(pageClassFullNameText.getText());
             sqlGenerator.setAuthor(groupNameText.getText());

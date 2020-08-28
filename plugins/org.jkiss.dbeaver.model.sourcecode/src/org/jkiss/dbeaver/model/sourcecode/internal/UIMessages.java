@@ -26,6 +26,10 @@ public class UIMessages  extends NLS {
 	public static String dbeaver_generate_sourcecode_pageClassFullName;
 	public static String dbeaver_generate_sourcecode_entitySuffix;
 	public static String dbeaver_generate_sourcecode_groupName;
+	public static String dbeaver_generate_sourcecode_jsonView;
+	public static String dbeaver_generate_sourcecode_businessException;
+	public static String dbeaver_generate_sourcecode_assertUtils;
+	public static String dbeaver_generate_sourcecode_baseController;
 	
 	public static String dbeaver_generate_sourcecode_preferences_generalSetting;
 	public static String dbeaver_generate_sourcecode_preferences_generalFileRule;

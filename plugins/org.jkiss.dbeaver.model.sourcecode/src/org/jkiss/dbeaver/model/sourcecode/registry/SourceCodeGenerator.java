@@ -22,6 +22,10 @@ public abstract class SourceCodeGenerator<OBJECT> extends DBRRunnableWithResult<
     private boolean generatorResult=true;//生成代码处理结果:true成功，false失败
     private String rootPath;//代码存放根目录
     private String packageName;//package 全路径
+    private String tpl_jsonView;
+    private String tpl_businessException;
+    private String tpl_assertUtils;
+    private String tpl_baseController;
     private boolean nameWithDo=true;//entity名称以Do后缀命名？
     private String entitySuffix;
     private String pageClassFullName;
@@ -254,6 +258,40 @@ public abstract class SourceCodeGenerator<OBJECT> extends DBRRunnableWithResult<
 
 	public void setRuleEntityLombokData(String ruleEntityLombokData) {
 		this.ruleEntityLombokData = ruleEntityLombokData;
+	}
+
+	public String getTpl_jsonView() {
+		return tpl_jsonView;
+	}
+
+	public void setTpl_jsonView(String tpl_jsonView) {
+		this.tpl_jsonView = tpl_jsonView;
+	}
+
+	public String getTpl_businessException() {
+		return tpl_businessException;
+	}
+
+	public void setTpl_businessException(String tpl_businessException) {
+		this.tpl_businessException = tpl_businessException;
+	}
+
+	public String getTpl_assertUtils() {
+		return tpl_assertUtils;
+	}
+
+	public void setTpl_assertUtils(String tpl_assertUtils) {
+		this.tpl_assertUtils = tpl_assertUtils;
+	}
+
+	public String getTpl_baseController() {
+		return tpl_baseController;
+	}
+
+	public void setTpl_baseController(String tpl_baseController) {
+		this.tpl_baseController = tpl_baseController;
 	} 
+	
+	
 
 }

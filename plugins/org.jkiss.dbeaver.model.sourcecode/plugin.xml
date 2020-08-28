@@ -50,6 +50,12 @@
          <generator id="tableSourceCode_controller" class="org.jkiss.dbeaver.model.sourcecode.controller.GeneratorSourceCodeController" label="Controller" description="Get source code" order="1010">
             <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
         </generator>
+         <generator id="tableSourceCode_html_list" class="org.jkiss.dbeaver.model.sourcecode.html.GeneratorSourceCodeHtmlThymeleafList" label="Html List(Thymeleaf)" description="Get source code" order="1011">
+            <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
+        </generator>
+         <generator id="tableSourceCode_html_list_table" class="org.jkiss.dbeaver.model.sourcecode.html.GeneratorSourceCodeHtmlThymeleafListTable" label="Html List Table(Thymeleaf)" description="Get source code" order="1012">
+            <objectType name="org.jkiss.dbeaver.model.DBPScriptObject"/>
+        </generator>
     </extension>
     
     

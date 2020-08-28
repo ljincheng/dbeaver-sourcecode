@@ -1,4 +1,4 @@
-package org.jkiss.dbeaver.model.sourcecode.component;
+package org.jkiss.dbeaver.model.sourcecode.html;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +21,12 @@ import org.jkiss.dbeaver.runtime.DBWorkbench;
 import org.jkiss.dbeaver.utils.GeneralUtils;
 import org.jkiss.utils.CommonUtils;
 
-public class GeneratorSourceCodeComponent extends GeneratorSourceCode{
+/**
+ * Html list_table
+ * @author ljc
+ *
+ */
+public class GeneratorSourceCodeHtmlThymeleafListTable extends GeneratorSourceCode{
 	 
 	private GeneratorSourceCodeExport codeExport;
 	 @Override
@@ -42,7 +47,7 @@ public class GeneratorSourceCodeComponent extends GeneratorSourceCode{
 	        		StringBuilder code=new StringBuilder(100);
 		        	generateTableMybatisCode(code,monitor, table, options);
 		        	codeExport=new GeneratorSourceCodeExport(getRootPath());
-		        	boolean genResult=codeExport.exportComponent(javaFileName(table,".java"), code.toString(),table.getDataSource().getName());
+		        	boolean genResult=codeExport.exportHtml(javaFileName(table,"/list_table.html"), code.toString(),table.getDataSource().getName());
 		        	if(!genResult)
 		        	{
 		        		if(!DBWorkbench.getPlatformUI().confirmAction("错误", "生成出现错误，是否继续"))
@@ -59,7 +64,7 @@ public class GeneratorSourceCodeComponent extends GeneratorSourceCode{
 	        		StringBuilder code=new StringBuilder(100);
 		        	generateTableMybatisCode(code,monitor, table, options);
 		        	codeExport=new GeneratorSourceCodeExport(getRootPath());
-		        	boolean genResult=codeExport.exportComponent(javaFileName(table,".java"), code.toString(),table.getDataSource().getName());
+		        	boolean genResult=codeExport.exportHtml(javaFileName(table,"/list_table.html"), code.toString(),table.getDataSource().getName());
 		        	if(!genResult)
 		        	{
 		        		if(!DBWorkbench.getPlatformUI().confirmAction("错误", "生成出现错误，是否继续"))
@@ -76,7 +81,7 @@ public class GeneratorSourceCodeComponent extends GeneratorSourceCode{
 	        		StringBuilder code=new StringBuilder(100);
 	        		generateTableMybatisCode(code,monitor, table, options);
 	        		codeExport=new GeneratorSourceCodeExport(getRootPath());
-	        		boolean genResult=codeExport.exportComponent(javaFileName(table,".java"), code.toString(),table.getDataSource().getName());
+	        		boolean genResult=codeExport.exportHtml(javaFileName(table,"/list_table.html"), code.toString(),table.getDataSource().getName());
 	        		if(!genResult)
 	        		{
 	        			if(!DBWorkbench.getPlatformUI().confirmAction("错误", "生成出现错误，是否继续"))
@@ -110,7 +115,7 @@ public class GeneratorSourceCodeComponent extends GeneratorSourceCode{
 	 {
 		 String tableName=table.getName();
 		 String mTableName_upperCamelCase=CodeHelper.toUpperCamelCase(tableName);//表名大写开头
-		 String mClassFullName=getClassFullName(mTableName_upperCamelCase, getRuleComponent());//类全称
+		 String mClassFullName=getClassFullName(mTableName_upperCamelCase, getRuleController());//类全称
 		 String mClassSimpleName=CodeHelper.getClassSimpleName(mClassFullName);//类简称
 		 return mClassSimpleName+extFileName;
 	 }
@@ -142,7 +147,24 @@ public class GeneratorSourceCodeComponent extends GeneratorSourceCode{
 		 String mComponentImpl_typeName=CodeHelper.getClassSimpleName(mComponentImpl_fullName);//ComponentImpl类型名称
 		 String mComponentImpl_paramName=CodeHelper.toLowerCamelCase(mComponentImpl_typeName);//ComponentImpl类变量
 		 
-		 String entitySuffix=CodeHelper.emptyString(getEntitySuffix(),true);
+		 String mService_fullName=getClassFullName(mTableName_upperCamelCase, getRuleService());//ComponentImpl类全称
+		 String mService_package=CodeHelper.getPackageName(mService_fullName);//ComponentImpl类包名
+		 String mService_typeName=CodeHelper.getClassSimpleName(mService_fullName);//ComponentImpl类型名称
+		 String mService_paramName=CodeHelper.toLowerCamelCase(mService_typeName);//ComponentImpl类变量
+		 
+		 String mController_fullName=getClassFullName(mTableName_upperCamelCase, getRuleController());//ComponentImpl类全称
+		 String mController_package=CodeHelper.getPackageName(mController_fullName);//ComponentImpl类包名
+		 String mController_typeName=CodeHelper.getClassSimpleName(mController_fullName);//ComponentImpl类型名称
+		 
+		 String mJsonView_fullName=getTpl_jsonView();
+		 String mJsonView_typeName=CodeHelper.getClassSimpleName(mJsonView_fullName);//JsonView类型名称
+		 String mBusinessException_fullName=getTpl_businessException(); 
+		 String mBusinessException_typeName=CodeHelper.getClassSimpleName(mBusinessException_fullName);//businessException类型名称
+		 String mAssertUtils_fullName=getTpl_assertUtils();
+		 String mAssertUtils_typeName=CodeHelper.getClassSimpleName(mAssertUtils_fullName);//assertUtils类型名称
+		 String mBaseController_fullName=getTpl_baseController();
+		 String mBaseController_typeName=CodeHelper.getClassSimpleName(mBaseController_fullName);//BaseController类型名称
+		 
 		 String pageClassFullName=getPageClassFullName();
 		 String pageClassSimpleName=null;
 		 
@@ -153,112 +175,103 @@ public class GeneratorSourceCodeComponent extends GeneratorSourceCode{
 		 String packageName=getPackageName();
 		 String tableName_upperCamelCase=CodeHelper.toUpperCamelCase(table.getName());
 		 String tableName_lowerCamelCase=CodeHelper.toLowerCamelCase(table.getName());
-		 String entityName=tableName_upperCamelCase+entitySuffix;//Entity Name
-		 String entityName_lowerCamelCase=tableName_lowerCamelCase+entitySuffix;//Entity Name
+		 
+		 String mGroupName=CodeHelper.emptyString(getGroupName(), true).trim();
 		 
 		 String primaryKey=null;//主键
 		 DBSTableColumn primaryTableColumn=null;//主键
 		 String primaryKey_upperCamelCase=null;
 		 String primaryKey_lowerCamelCase=null;
+		 String mPrimaryKey_typeName=null;
+		 String mPrimaryKey_paramName=null;
+		
 
 		 List<DBSEntityAttribute> attrs= (List<DBSEntityAttribute>)table.getAttributes(monitor);
 		 boolean useGeneratedKeys=false;
 		 Collection<? extends DBSTableIndex> indexes = table.getIndexes(monitor);
-      if (!CommonUtils.isEmpty(indexes)) {
-          for (DBSTableIndex index : indexes) {
-         	 if( index.isPrimary())
-         	 {
-         		 List<? extends DBSTableIndexColumn>  tableColumn=index.getAttributeReferences(monitor);
-         		 for(DBSTableIndexColumn column:tableColumn)
-         		 {
-         			 DBSTableColumn primaryColumn= column.getTableColumn();
-         			 if(primaryColumn!=null)
-         			 {
-         				 primaryTableColumn=primaryColumn;
-	            			 useGeneratedKeys=primaryColumn.isAutoGenerated();
-	            			 primaryKey=primaryColumn.getName();
-	            			 primaryKey_upperCamelCase=CodeHelper.toUpperCamelCase(primaryKey);
-	            			 primaryKey_lowerCamelCase=CodeHelper.toLowerCamelCase(primaryKey);
-         			 }
-         		 }
-         		 
-         	 }
-          }
-      }
-      
-		 CodeHelper.addCodeLine(sql,String.format("package %s;",mComponent_package) );
-		 CodeHelper.addCodeLine(sql, "import java.util.List;");
-		 CodeHelper.addCodeLine(sql, "import java.util.Map;");
-		 CodeHelper.importJavaPackage(sql, attrs);
-		 sql.append(lf);
-		 
-		 if(!CodeHelper.isEmpty(pageClassFullName))
+	     if (!CommonUtils.isEmpty(indexes)) {
+	         for (DBSTableIndex index : indexes) {
+	        	 if( index.isPrimary())
+	        	 {
+	        		 List<? extends DBSTableIndexColumn>  tableColumn=index.getAttributeReferences(monitor);
+	        		 for(DBSTableIndexColumn column:tableColumn)
+	        		 {
+	        			 DBSTableColumn primaryColumn= column.getTableColumn();
+	        			 if(primaryColumn!=null)
+	        			 {
+	        				 primaryTableColumn=primaryColumn;
+		            			 useGeneratedKeys=primaryColumn.isAutoGenerated();
+		            			 primaryKey=primaryColumn.getName();
+		            			 primaryKey_upperCamelCase=CodeHelper.toUpperCamelCase(primaryKey);
+		            			 primaryKey_lowerCamelCase=CodeHelper.toLowerCamelCase(primaryKey);
+		            			 
+		            			 mPrimaryKey_typeName=CodeHelper.columnType2JavaType(primaryTableColumn);
+		            			 mPrimaryKey_paramName= primaryKey_lowerCamelCase;
+	        			 }
+	        		 }
+	        		 
+	        	 }
+	         }
+	         
+	     }
+   
+	     StringBuilder html_theadList=new StringBuilder();
+	     StringBuilder html_thbodyList=new StringBuilder();
+	     
+	     if(attrs!=null)
 		 {
-			 CodeHelper.addCodeLine(sql, String.format("import %s;", pageClassFullName));
+			 for(DBSEntityAttribute attr:attrs)
+			 { 
+				 String columnName=attr.getName();
+				 String codeName=CodeHelper.toLowerCamelCase(columnName);
+				 String codeName_upperCamelCase=CodeHelper.toUpperCamelCase(columnName);
+				 
+				 CodeHelper.addCodeLine(html_theadList, String.format("<th th:text=\"#{%s.%s.%s}\">%s</th>", mGroupName,tableName_lowerCamelCase,codeName,attr.getDescription()));
+				 CodeHelper.addCodeLine(html_thbodyList, String.format("<td th:text=\"#{modelObj?.%s}\"></td>", codeName));
+			 }
 		 }
-		 CodeHelper.addCodeLine(sql, String.format("import %s;",mEntity_fullName));
-		 sql.append(lf);
-		 CodeHelper.addCodeLine(sql,String.format("/**%s * %s%s * @author %s%s * @version v1.0%s */",lf,description,lf,getAuthor(),lf,lf));
-		 CodeHelper.addCodeLine(sql,String.format( "public interface %s {",mComponent_typeName));
-		 sql.append(lf);
-		 
-				
-		 CodeHelper.addCodeLine(sql,"/**" + lf
-		 		+"	 * 添加"+description + lf
-		 		+"	 * @param "+mEntity_paramName + lf
-		 		+"	 * @return" + lf
-		 		+"	 */");
-		 CodeHelper.addCodeLine(sql,String.format("public Integer insert%s(%s %s);", tableName_upperCamelCase,mEntity_typeName,mEntity_paramName) );
-		 sql.append(lf);
-		 CodeHelper.addCodeLine(sql,"/**" + lf
-			 		+"	 * 获取"+description+"列表" + lf
-			 		+"	 * @param selectItem" + lf
-			 		+"	 * @return" + lf
-			 		+"	 */");
-		 CodeHelper.addCodeLine(sql,String.format("public List<%s> query%sList(Map<String,Object> selectItem);", mEntity_typeName,tableName_upperCamelCase));
-		 sql.append(lf);
-		 
-		 if(!CodeHelper.isEmpty(pageClassFullName))
-		 {
-			 CodeHelper.addCodeLine(sql,"/**" + lf
-				 		+"	 * 获取"+description+"分页列表" + lf
-				 		+"	 * @param pageIndex 起始页"+lf
-				 		+"	 * @param pageSize 每页记录数"+lf
-				 		+"	 * @param selectItem 过滤条件" + lf
-				 		+"	 * @return" + lf
-				 		+"	 */");
-			 CodeHelper.addCodeLine(sql,String.format("public %s<%s> query%sListPage(Long pageIndex,Integer pageSize,Map<String,Object> selectItem);",pageClassSimpleName, mEntity_typeName,tableName_upperCamelCase));
-			 sql.append(lf);
-		 }
-		 
-		 if(!CodeHelper.isEmpty(primaryKey))
-		 {
-			 CodeHelper.addCodeLine(sql,"/**" + lf
-				 		+"	 * 根据"+primaryKey+"修改"+description + lf
-				 		+"	 * @param "+mEntity_paramName + lf
-				 		+"	 * @return" + lf
-				 		+"	 */");
-			 CodeHelper.addCodeLine(sql,String.format("public Integer update%sBy%s(%s %s);", tableName_upperCamelCase,primaryKey_upperCamelCase,mEntity_typeName,mEntity_paramName));
-			 sql.append(lf);
-			 CodeHelper.addCodeLine(sql,"/**" + lf
-				 		+"	 * 根据"+primaryKey+"删除"+description + lf
-				 		+"	 * @param "+primaryKey_lowerCamelCase + lf
-				 		+"	 * @return" + lf
-				 		+"	 */");
-			 CodeHelper.addCodeLine(sql, String.format("public Integer delete%sBy%s(%s %s);",tableName_upperCamelCase,primaryKey_upperCamelCase,CodeHelper.columnType2JavaType(primaryTableColumn),primaryKey_lowerCamelCase));
-			 sql.append(lf);
-			 CodeHelper.addCodeLine(sql,"/**" + lf
-				 		+"	 * 根据"+primaryKey+"查找"+description + lf
-				 		+"	 * @param "+primaryKey_lowerCamelCase + lf
-				 		+"	 * @return" + lf
-				 		+"	 */");
-			 CodeHelper.addCodeLine(sql, String.format("public %s find%sBy%s(%s %s);", mEntity_typeName,tableName_upperCamelCase,primaryKey_upperCamelCase,CodeHelper.columnType2JavaType(primaryTableColumn),primaryKey_lowerCamelCase));
-			 sql.append(lf);
-		 }
-			 
-		  
-		 sql.append(lf);
-		 CodeHelper.addCodeLine(sql, "}");
+	    
+		 String html= "<div xmlns:th=\"http://www.thymeleaf.org\" xmlns:shiro=\"http://www.pollix.at/thymeleaf/shiro\">\n" + 
+		 		"    <table class=\"table table-hover\" >\n" + 
+		 		"        <thead>\n" + 
+		 		"        <tr >\n" + 
+		 		"            <th style=\"width:60px; min-width: 60px;\" th:text=\"#{i18n.serial}\"></th>\n" + 
+		 		"            %s" + 
+		 		"            <th th:text=\"#{i18n.actions}\">操作</th>\n" + 
+		 		"        </tr>\n" + 
+		 		"        </thead>\n" + 
+		 		"        <tbody>\n" + 
+		 		"\n" + 
+		 		"        <tr th:each=\"modelObj,status: ${pagedata.page}\">\n" + 
+		 		"            <td th:text=\"${pagedata.totalNum - pagedata.startOfPage - status.index }\"></td>\n" + 
+		 		"           %s" + 
+		 		"            <td >\n" + 
+		 		"                <div class=\"dropdown\">\n" + 
+		 		"                    <a class=\"btn-link dropdown-toggle\" data-toggle=\"dropdown\" ><th:block th:text=\"#{i18n.actions}\" /> <span\n" + 
+		 		"                            class=\"caret\"></span></a>\n" + 
+		 		"                    <ul class=\"dropdown-menu pull-right\" role=\"menu\">\n" + 
+		 		"                        <li shiro:hasPermission=\"shop_category_edit\"><a class=\"btn-link\"  data-toggle=\"modal\" th:href=\"@{add(id=${modelObj.id })}\" th:text=\"#{i18n.edit}\">修改</a></li>\n" + 
+		 		"                        <li shiro:hasPermission=\"shop_category_delete\" ><a class=\"btn-link\" th:onclick=\"deleteData('[[${modelObj.id}]]',[[${modelObj.status}]])\" th:text=\"#{i18n.delete}\" >删除</a></li>\n" + 
+		 		"                    </ul>\n" + 
+		 		"                </div>\n" + 
+		 		"            </td>\n" + 
+		 		"        </tr>\n" + 
+		 		"\n" + 
+		 		"        </tbody>\n" + 
+		 		"    </table>\n" + 
+		 		"\n" + 
+		 		"\n" + 
+		 		"    <ul class=\"pager\" id=\"pager\">\n" + 
+		 		"    </ul>\n" + 
+		 		"    <script type=\"text/javascript\" th:inline=\"javascript\">\n" + 
+		 		"        <!--\n" + 
+		 		"        $(function(){\n" + 
+		 		"            jqPager({id:\"pager\",firstBt:/*[[#{sys.page.first}]]*/\"首页\",preBt:/*[[#{sys.page.previous}]]*/\"上一页\",nextBt:/*[[#{sys.page.next}]]*/\"下一页\",lastBt:/*[[#{sys.page.last}]]*/\"末页\",totalPages:[[${pagedata.totalPage}]],pageIndex:[[${pagedata.pageIndex}]],change:toPage});\n" + 
+		 		"        });\n" + 
+		 		"        //-->\n" + 
+		 		"    </script>\n" + 
+		 		"</div>";
+		 sql.append(String.format(html, html_theadList.toString(),html_thbodyList.toString()));
 		 
 
 	 }
